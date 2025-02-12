@@ -1,8 +1,4 @@
-package com.ml.shubham0204.docqa.domain.readers
-
-import com.smith.smith_rag.readers.DOCXReader
-import com.smith.smith_rag.readers.PDFReader
-import com.smith.smith_rag.readers.Reader
+package com.smith.smith_rag.readers
 
 class Readers {
 
