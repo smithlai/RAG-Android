@@ -1,10 +1,10 @@
 package com.smith.smith_rag.ui.screens.chat
 
 import androidx.lifecycle.ViewModel
-//import com.smith.smith_rag.data.ChunksDB
-//import com.smith.smith_rag.data.DocumentsDB
-//import com.smith.smith_rag.data.GeminiAPIKey
-//import com.smith.smith_rag.data.RetrievedContext
+import com.smith.smith_rag.data.ChunksDB
+import com.smith.smith_rag.data.DocumentsDB
+import com.smith.smith_rag.data.GeminiAPIKey
+import com.smith.smith_rag.data.RetrievedContext
 //import com.ml.shubham0204.docqa.domain.embeddings.SentenceEmbeddingProvider
 //import com.ml.shubham0204.docqa.domain.llm.GeminiRemoteAPI
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -13,10 +13,11 @@ import org.koin.android.annotation.KoinViewModel
 
 @KoinViewModel
 class RAGChatViewModel(
+
+    private val documentsDB: DocumentsDB,
+    private val chunksDB: ChunksDB,
+    private val geminiAPIKey: GeminiAPIKey,
 //    Todo
-//    private val documentsDB: DocumentsDB,
-//    private val chunksDB: ChunksDB,
-//    private val geminiAPIKey: GeminiAPIKey,
 //    private val sentenceEncoder: SentenceEmbeddingProvider,
 ) : ViewModel() {
     private val _questionState = MutableStateFlow("")
@@ -28,9 +29,8 @@ class RAGChatViewModel(
     private val _isGeneratingResponseState = MutableStateFlow(false)
     val isGeneratingResponseState: StateFlow<Boolean> = _isGeneratingResponseState
 
-    //    Todo
-//    private val _retrievedContextListState = MutableStateFlow(emptyList<RetrievedContext>())
-//    val retrievedContextListState: StateFlow<List<RetrievedContext>> = _retrievedContextListState
+    private val _retrievedContextListState = MutableStateFlow(emptyList<RetrievedContext>())
+    val retrievedContextListState: StateFlow<List<RetrievedContext>> = _retrievedContextListState
 
     fun getAnswer(
         query: String,
@@ -63,9 +63,8 @@ class RAGChatViewModel(
 //            throw e
 //        }
     }
-//    Todo
-//
-//    fun checkNumDocuments(): Boolean = documentsDB.getDocsCount() > 0
-//
-//    fun checkValidAPIKey(): Boolean = geminiAPIKey.getAPIKey() != null
+
+    fun checkNumDocuments(): Boolean = documentsDB.getDocsCount() > 0
+
+    fun checkValidAPIKey(): Boolean = geminiAPIKey.getAPIKey() != null
 }

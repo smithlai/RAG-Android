@@ -15,6 +15,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -45,8 +46,10 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.net.toUri
 import com.smith.smith_rag.ui.components.AppAlertDialog
 import com.smith.smith_rag.ui.components.createAlertDialog
 import com.smith.smith_rag.ui.theme.DocQATheme
@@ -101,8 +104,7 @@ private fun ColumnScope.QALayout(chatViewModel: RAGChatViewModel) {
     val question by chatViewModel.questionState.collectAsState()
     val response by chatViewModel.responseState.collectAsState()
     val isGeneratingResponse by chatViewModel.isGeneratingResponseState.collectAsState()
-    //    Todo
-//    val retrievedContextList by chatViewModel.retrievedContextListState.collectAsState()
+    val retrievedContextList by chatViewModel.retrievedContextListState.collectAsState()
     val context = LocalContext.current
     Column(
         modifier = Modifier.fillMaxSize().weight(1f),
@@ -183,31 +185,30 @@ private fun ColumnScope.QALayout(chatViewModel: RAGChatViewModel) {
                     }
                 }
                 if (!isGeneratingResponse) {
-                    //    Todo
-//                    items(retrievedContextList) { retrievedContext ->
-//                        Column(
-//                            modifier =
-//                                Modifier
-//                                    .padding(8.dp)
-//                                    .background(Color.Cyan, RoundedCornerShape(16.dp))
-//                                    .padding(16.dp)
-//                                    .fillMaxWidth(),
-//                        ) {
-//                            Text(
-//                                text = "\"${retrievedContext.context}\"",
-//                                color = Color.Black,
-//                                modifier = Modifier.fillMaxWidth(),
-//                                fontSize = 12.sp,
-//                                fontStyle = FontStyle.Italic,
-//                            )
-//                            Text(
-//                                text = retrievedContext.fileName,
-//                                color = Color.Black,
-//                                modifier = Modifier.fillMaxWidth(),
-//                                fontSize = 10.sp,
-//                            )
-//                        }
-//                    }
+                    items(retrievedContextList) { retrievedContext ->
+                        Column(
+                            modifier =
+                                Modifier
+                                    .padding(8.dp)
+                                    .background(Color.Cyan, RoundedCornerShape(16.dp))
+                                    .padding(16.dp)
+                                    .fillMaxWidth(),
+                        ) {
+                            Text(
+                                text = "\"${retrievedContext.context}\"",
+                                color = Color.Black,
+                                modifier = Modifier.fillMaxWidth(),
+                                fontSize = 12.sp,
+                                fontStyle = FontStyle.Italic,
+                            )
+                            Text(
+                                text = retrievedContext.fileName,
+                                color = Color.Black,
+                                modifier = Modifier.fillMaxWidth(),
+                                fontSize = 10.sp,
+                            )
+                        }
+                    }
                 }
             }
         }
@@ -242,30 +243,29 @@ private fun QueryInput(
         IconButton(
             modifier = Modifier.background(Color.Blue, CircleShape),
             onClick = {
-//Todo:
-//                keyboardController?.hide()
-//                if (!chatViewModel.checkNumDocuments()) {
-//                    Toast
-//                        .makeText(context, "Add documents to execute queries", Toast.LENGTH_LONG)
-//                        .show()
-//                    return@IconButton
-//                }
-//                if (!chatViewModel.checkValidAPIKey()) {
-//                    createAlertDialog(
-//                        dialogTitle = "Invalid API Key",
-//                        dialogText = "Please enter a Gemini API key to use a LLM for generating responses.",
-//                        dialogPositiveButtonText = "Add API key",
-//                        onPositiveButtonClick = onEditAPIKeyClick,
-//                        dialogNegativeButtonText = "Open Gemini Console",
-//                        onNegativeButtonClick = {
-//                            Intent(Intent.ACTION_VIEW).apply {
-//                                data = "https://aistudio.google.com/apikey".toUri()
-//                                context.startActivity(this)
-//                            }
-//                        },
-//                    )
-//                    return@IconButton
-//                }
+                keyboardController?.hide()
+                if (!chatViewModel.checkNumDocuments()) {
+                    Toast
+                        .makeText(context, "Add documents to execute queries", Toast.LENGTH_LONG)
+                        .show()
+                    return@IconButton
+                }
+                if (!chatViewModel.checkValidAPIKey()) {
+                    createAlertDialog(
+                        dialogTitle = "Invalid API Key",
+                        dialogText = "Please enter a Gemini API key to use a LLM for generating responses.",
+                        dialogPositiveButtonText = "Add API key",
+                        onPositiveButtonClick = onEditAPIKeyClick,
+                        dialogNegativeButtonText = "Open Gemini Console",
+                        onNegativeButtonClick = {
+                            Intent(Intent.ACTION_VIEW).apply {
+                                data = "https://aistudio.google.com/apikey".toUri()
+                                context.startActivity(this)
+                            }
+                        },
+                    )
+                    return@IconButton
+                }
                 if (questionText.trim().isEmpty()) {
                     Toast.makeText(context, "Enter a query to execute", Toast.LENGTH_LONG).show()
                     return@IconButton
