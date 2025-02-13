@@ -33,7 +33,7 @@ class XXXApplication : Application() {
 
 ## Jetpack compose
 
-smith_rag/build.gradle.kts
+__smith_rag/build.gradle.kts__
 ```kotlin
 plugins {
     .....
@@ -71,7 +71,7 @@ dependencies {
 ## objectbox
 
 
-root/build.gradle.kts
+__root/build.gradle.kts__
 ```kotlin
 // 導入objectbox plugin (https://docs.objectbox.io/getting-started)
 buildscript {
@@ -83,7 +83,7 @@ buildscript {
 ....
 ```
 
-smith_rag/build.gradle.kts
+__smith_rag/build.gradle.kts__
 ```kotlin
 // 記得module不要使用Implementation跟 apply(plugin = "io.objectbox")
 // 否則會跳出
@@ -109,4 +109,15 @@ dependencies {
 ....
 // 不要使用objectbox apply
 //apply(plugin = "io.objectbox")
+```
+
+__為了因應多組objectbox，每個都要有自己的name__
+// https://stackoverflow.com/questions/53546614/how-to-use-objectbox-in-gradle-multi-module-project
+```kotlin
+fun init(context: Context) {
+    store = MyObjectBox.builder()
+        .androidContext(context)
+        .name(BuildConfig.MODULE_NAME)
+        .build()
+}
 ```

@@ -19,6 +19,8 @@ android {
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")
+
+        buildConfigField("String", "MODULE_NAME", "\"${project.name}\"")
         buildConfigField("String", "GEMINI_KEY", "${localProperties.getProperty("geminiKey")}")
     }
 
