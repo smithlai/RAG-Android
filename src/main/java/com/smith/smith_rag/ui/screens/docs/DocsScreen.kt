@@ -20,6 +20,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
@@ -55,6 +56,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
+import com.smith.smith_rag.data.Document
 import com.smith.smith_rag.readers.Readers
 import com.smith.smith_rag.ui.components.AppAlertDialog
 import com.smith.smith_rag.ui.components.AppProgressDialog
@@ -70,8 +72,7 @@ import kotlinx.coroutines.withContext
 import org.koin.androidx.compose.koinViewModel
 
 private val showDocDetailDialog = mutableStateOf(false)
-//    todo
-//private val dialogDoc = mutableStateOf<Document?>(null)
+private val dialogDoc = mutableStateOf<Document?>(null)
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -113,29 +114,27 @@ fun DocsScreen(onBackClick: (() -> Unit)) {
 
 @Composable
 private fun ColumnScope.DocsList(docsViewModel: DocsViewModel) {
-    // todo
-//    val docs by docsViewModel.getAllDocuments().collectAsState(emptyList())
-//    LazyColumn(modifier = Modifier.fillMaxSize().weight(1f)) {
-//        items(docs) { doc ->
-//            DocsListItem(
-//                doc.copy(
-//                    docText =
-//                        if (doc.docText.length > 200) {
-//                            doc.docText.substring(0, 200) + " ..."
-//                        } else {
-//                            doc.docText
-//                        },
-//                ),
-//                onRemoveDocClick = { docId -> docsViewModel.removeDocument(docId) },
-//            )
-//        }
-//    }
+    val docs by docsViewModel.getAllDocuments().collectAsState(emptyList())
+    LazyColumn(modifier = Modifier.fillMaxSize().weight(1f)) {
+        items(docs) { doc ->
+            DocsListItem(
+                doc.copy(
+                    docText =
+                        if (doc.docText.length > 200) {
+                            doc.docText.substring(0, 200) + " ..."
+                        } else {
+                            doc.docText
+                        },
+                ),
+                onRemoveDocClick = { docId -> docsViewModel.removeDocument(docId) },
+            )
+        }
+    }
 }
 
 @Composable
 private fun DocsListItem(
-    // todo
-//    document: Document,
+    document: Document,
     onRemoveDocClick: ((Long) -> Unit),
 ) {
     Row(
@@ -143,8 +142,7 @@ private fun DocsListItem(
             Modifier
                 .fillMaxWidth()
                 .clickable {
-                    //    todo
-//                    dialogDoc.value = document
+                    dialogDoc.value = document
                     showDocDetailDialog.value = true
                 }.background(Color.White)
                 .padding(12.dp),
@@ -152,24 +150,21 @@ private fun DocsListItem(
     ) {
         Column(modifier = Modifier.fillMaxWidth().weight(1f)) {
             Text(
-                // todo: text = document.docFileName,
-                "AAAAA",
+                text = document.docFileName,
                 style = MaterialTheme.typography.bodyLarge,
                 color = Color.DarkGray,
                 fontWeight = FontWeight.Bold,
             )
             Spacer(modifier = Modifier.height(2.dp))
             Text(
-                // todo: text = document.docText.trim().replace("\n", ""),
-                "AAAAA",
+                text = document.docText.trim().replace("\n", ""),
                 style = MaterialTheme.typography.bodySmall,
                 color = Color.DarkGray,
                 maxLines = 1,
             )
             Spacer(modifier = Modifier.height(4.dp))
             Text(
-                // todo: text = DateUtils.getRelativeTimeSpanString(document.docAddedTime).toString(),
-                "AAAAAA",
+                text = DateUtils.getRelativeTimeSpanString(document.docAddedTime).toString(),
                 style = MaterialTheme.typography.labelSmall,
                 color = Color.DarkGray,
             )
@@ -183,8 +178,7 @@ private fun DocsListItem(
                             "Are you sure to remove this document from the database. Responses to " +
                                 "further queries will not refer content from this document.",
                         dialogPositiveButtonText = "Remove",
-                        // todo: onPositiveButtonClick = { onRemoveDocClick(document.docId) },
-                        onPositiveButtonClick = {  },
+                        onPositiveButtonClick = { onRemoveDocClick(document.docId) },
                         dialogNegativeButtonText = "Cancel",
                         onNegativeButtonClick = {},
                     )
@@ -222,12 +216,11 @@ private fun DocOperations(docsViewModel: DocsViewModel) {
                 context.contentResolver.openInputStream(uri)?.let { inputStream ->
                     showProgressDialog()
                     CoroutineScope(Dispatchers.IO).launch {
-// todo
-//                        docsViewModel.addDocument(
-//                            inputStream,
-//                            docFileName,
-//                            docType,
-//                        )
+                        docsViewModel.addDocument(
+                            inputStream,
+                            docFileName,
+                            docType,
+                        )
                         withContext(Dispatchers.IO) {
                             hideProgressDialog()
                             inputStream.close()
@@ -321,15 +314,14 @@ private fun DocOperations(docsViewModel: DocsViewModel) {
                     if (pdfUrl.isNotBlank()) {
                         showProgressDialog()
                         CoroutineScope(Dispatchers.IO).launch {
-// todo
-//                            docsViewModel.addDocumentFromUrl(pdfUrl, context) { success ->
-//                                hideProgressDialog()
-//                                if (success) {
-//                                    Toast.makeText(context, "PDF added from source", Toast.LENGTH_SHORT).show()
-//                                } else {
-//                                    Toast.makeText(context, "Failed to download", Toast.LENGTH_SHORT).show()
-//                                }
-//                            }
+                            docsViewModel.addDocumentFromUrl(pdfUrl, context) { success ->
+                                hideProgressDialog()
+                                if (success) {
+                                    Toast.makeText(context, "PDF added from source", Toast.LENGTH_SHORT).show()
+                                } else {
+                                    Toast.makeText(context, "Failed to download", Toast.LENGTH_SHORT).show()
+                                }
+                            }
                             showUrlDialog = false
                         }
                     }
@@ -350,9 +342,7 @@ private fun DocOperations(docsViewModel: DocsViewModel) {
 private fun DocDetailDialog() {
     var isVisible by remember { showDocDetailDialog }
     val context = LocalContext.current
-    //    todo
-//    val doc by remember { dialogDoc }
-    val doc:Float? by remember { mutableStateOf(0.0f) }
+    val doc by remember { dialogDoc }
     if (isVisible && doc != null) {
         Dialog(onDismissRequest = { /* Progress dialogs are non-cancellable */ }) {
             Box(
@@ -365,14 +355,12 @@ private fun DocDetailDialog() {
             ) {
                 Column(horizontalAlignment = Alignment.Start) {
                     Text(
-                        //    todo: text = doc?.docFileName ?: "",
-                        "AAAAA",
+                        text = doc?.docFileName ?: "",
                         style = MaterialTheme.typography.headlineSmall,
                     )
                     Spacer(modifier = Modifier.height(8.dp))
                     Text(
-                        //    todo: text = doc?.docText ?: "",
-                        "BBBBBBB",
+                        text = doc?.docText ?: "",
                         modifier = Modifier.height(200.dp).verticalScroll(rememberScrollState()),
                     )
                     Spacer(modifier = Modifier.height(8.dp))
@@ -386,8 +374,7 @@ private fun DocDetailDialog() {
                                 val sendIntent: Intent =
                                     Intent().apply {
                                         action = Intent.ACTION_SEND
-                                        //    todo: putExtra(Intent.EXTRA_TEXT, doc?.docText)
-                                        putExtra(Intent.EXTRA_TEXT, "CCCCCCCCCC")
+                                        putExtra(Intent.EXTRA_TEXT, doc?.docText)
                                         type = "text/plain"
                                     }
                                 val shareIntent = Intent.createChooser(sendIntent, null)
