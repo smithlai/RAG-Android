@@ -45,10 +45,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.core.net.toUri
 import com.smith.smith_rag.ui.components.AppAlertDialog
 import com.smith.smith_rag.ui.components.createAlertDialog
 import com.smith.smith_rag.ui.theme.DocQATheme
@@ -58,7 +56,7 @@ import org.koin.androidx.compose.koinViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ChatScreen(
+fun RAGChatScreen(
     onOpenDocsClick: (() -> Unit),
     onEditAPIKeyClick: (() -> Unit),
 ) {
@@ -86,7 +84,7 @@ fun ChatScreen(
             },
         ) { innerPadding ->
             Column(modifier = Modifier.padding(innerPadding).padding(16.dp).fillMaxWidth()) {
-                val chatViewModel: ChatViewModel = koinViewModel()
+                val chatViewModel: RAGChatViewModel = koinViewModel()
                 Column {
                     QALayout(chatViewModel)
                     Spacer(modifier = Modifier.height(8.dp))
@@ -99,7 +97,7 @@ fun ChatScreen(
 }
 
 @Composable
-private fun ColumnScope.QALayout(chatViewModel: ChatViewModel) {
+private fun ColumnScope.QALayout(chatViewModel: RAGChatViewModel) {
     val question by chatViewModel.questionState.collectAsState()
     val response by chatViewModel.responseState.collectAsState()
     val isGeneratingResponse by chatViewModel.isGeneratingResponseState.collectAsState()
@@ -218,7 +216,7 @@ private fun ColumnScope.QALayout(chatViewModel: ChatViewModel) {
 
 @Composable
 private fun QueryInput(
-    chatViewModel: ChatViewModel,
+    chatViewModel: RAGChatViewModel,
     onEditAPIKeyClick: () -> Unit,
 ) {
     var questionText by remember { mutableStateOf("") }

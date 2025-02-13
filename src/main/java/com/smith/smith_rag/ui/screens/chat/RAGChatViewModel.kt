@@ -7,15 +7,12 @@ import androidx.lifecycle.ViewModel
 //import com.smith.smith_rag.data.RetrievedContext
 //import com.ml.shubham0204.docqa.domain.embeddings.SentenceEmbeddingProvider
 //import com.ml.shubham0204.docqa.domain.llm.GeminiRemoteAPI
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.launch
 import org.koin.android.annotation.KoinViewModel
 
 @KoinViewModel
-class ChatViewModel(
+class RAGChatViewModel(
 //    Todo
 //    private val documentsDB: DocumentsDB,
 //    private val chunksDB: ChunksDB,
