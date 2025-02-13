@@ -55,7 +55,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
-import com.ml.shubham0204.docqa.domain.readers.Readers
+import com.smith.smith_rag.readers.Readers
 import com.smith.smith_rag.ui.components.AppAlertDialog
 import com.smith.smith_rag.ui.components.AppProgressDialog
 import com.smith.smith_rag.ui.components.createAlertDialog

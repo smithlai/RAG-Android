@@ -2,6 +2,7 @@ plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)  // https://developer.android.com/develop/ui/compose/compiler
+    id("com.google.devtools.ksp")   // for ComponentScan
 }
 
 android {
@@ -37,14 +38,18 @@ android {
     }
 
 }
-
+ksp {
+    arg("KOIN_CONFIG_CHECK", "true")
+}
 dependencies {
 
     // Koin: dependency injection
     libs.koin.annotations?.let { implementation(it) } ?: implementation("io.insert-koin:koin-annotations:1.3.1")
+    ksp(libs.koin.ksp.compiler)?.let { implementation(it) } ?: implementation("io.insert-koin:koin-ksp-compiler:1.3.1")   // for @ComponentScan automate generate module
     libs.koin.android?.let { implementation(it) } ?: implementation("io.insert-koin:koin-android:3.5.6")
     libs.koin.androidx.compose?.let { implementation(it) } ?: implementation("io.insert-koin:koin-androidx-compose:3.5.6")
     libs.androidx.activity.compose?.let { implementation(it) } ?: implementation("androidx.activity:activity-compose:1.9.3")  // for rememberLauncherForActivityResult
+
     // org.apache.poi
     implementation("org.apache.poi:poi:5.4.0")
     implementation("org.apache.poi:poi-ooxml:5.4.0")
