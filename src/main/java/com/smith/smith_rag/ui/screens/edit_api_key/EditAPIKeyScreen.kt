@@ -63,15 +63,11 @@ fun EditAPIKeyScreen(onBackClick: () -> Unit) {
                 horizontalAlignment = Alignment.CenterHorizontally,
                 modifier = Modifier.padding(innerPadding).fillMaxWidth(),
             ) {
-                //todo: var apiKey by remember { mutableStateOf(viewModel.getAPIKey() ?: "") }
+                var apiKey by remember { mutableStateOf(viewModel.getAPIKey() ?: "") }
                 TextField(
                     modifier = Modifier.fillMaxWidth().padding(16.dp),
-                    //todo:
-//                    value = apiKey,
-//                    onValueChange = { apiKey = it },
-                    value = "AAAAAAAA",
-                    onValueChange = {},
-
+                    value = apiKey,
+                    onValueChange = { apiKey = it },
                     shape = RoundedCornerShape(16.dp),
                     colors =
                         TextFieldDefaults.colors(
@@ -84,9 +80,9 @@ fun EditAPIKeyScreen(onBackClick: () -> Unit) {
                     placeholder = { Text(text = "Enter Gemini API key...") },
                 )
                 Button(
-                    enabled = false, //todo: apiKey.isNotBlank(),
+                    enabled = apiKey.isNotBlank(),
                     onClick = {
-                        //todo: viewModel.saveAPIKey(apiKey)
+                        viewModel.saveAPIKey(apiKey)
                         Toast.makeText(context, "API key saved", Toast.LENGTH_LONG).show()
                     },
                 ) {

@@ -5,10 +5,13 @@ import com.smith.smith_rag.data.ChunksDB
 import com.smith.smith_rag.data.DocumentsDB
 import com.smith.smith_rag.data.GeminiAPIKey
 import com.smith.smith_rag.data.RetrievedContext
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 //import com.ml.shubham0204.docqa.domain.embeddings.SentenceEmbeddingProvider
 //import com.ml.shubham0204.docqa.domain.llm.GeminiRemoteAPI
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.launch
 import org.koin.android.annotation.KoinViewModel
 
 @KoinViewModel
@@ -36,32 +39,36 @@ class RAGChatViewModel(
         query: String,
         prompt: String,
     ) {
+
+        val apiKey = geminiAPIKey.getAPIKey() ?: throw Exception("Gemini API key is null")
 //    Todo
-//        val apiKey = geminiAPIKey.getAPIKey() ?: throw Exception("Gemini API key is null")
 //        val geminiRemoteAPI = GeminiRemoteAPI(apiKey)
-//        _isGeneratingResponseState.value = true
-//        _questionState.value = query
-//        try {
-//            var jointContext = ""
-//            val retrievedContextList = ArrayList<RetrievedContext>()
+
+        _isGeneratingResponseState.value = true
+        _questionState.value = query
+        try {
+            var jointContext = ""
+            val retrievedContextList = ArrayList<RetrievedContext>()
+//    Todo
 //            val queryEmbedding = sentenceEncoder.encodeText(query)
 //            chunksDB.getSimilarChunks(queryEmbedding, n = 5).forEach {
 //                jointContext += " " + it.second.chunkData
 //                retrievedContextList.add(RetrievedContext(it.second.docFileName, it.second.chunkData))
 //            }
-//            val inputPrompt = prompt.replace("\$CONTEXT", jointContext).replace("\$QUERY", query)
-//            CoroutineScope(Dispatchers.IO).launch {
+            val inputPrompt = prompt.replace("\$CONTEXT", jointContext).replace("\$QUERY", query)
+            CoroutineScope(Dispatchers.IO).launch {
+//                todo
 //                geminiRemoteAPI.getResponse(inputPrompt)?.let { llmResponse ->
 //                    _responseState.value = llmResponse
 //                    _isGeneratingResponseState.value = false
 //                    _retrievedContextListState.value = retrievedContextList
 //                }
-//            }
-//        } catch (e: Exception) {
-//            _isGeneratingResponseState.value = false
-//            _questionState.value = ""
-//            throw e
-//        }
+            }
+        } catch (e: Exception) {
+            _isGeneratingResponseState.value = false
+            _questionState.value = ""
+            throw e
+        }
     }
 
     fun checkNumDocuments(): Boolean = documentsDB.getDocsCount() > 0
