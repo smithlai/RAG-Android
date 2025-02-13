@@ -1,10 +1,15 @@
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)  // https://developer.android.com/develop/ui/compose/compiler
-    id("com.google.devtools.ksp")   // for ComponentScan
+    id("com.google.devtools.ksp")   // for @ComponentScan, or this may cause "org.koin.core.error.NoBeanDefFoundException: No definition found for type ChatViewModel"
+    id("io.objectbox") // 確保有這行
 }
-
+val localProperties = Properties().apply {
+    load(project.rootProject.file("local.properties").inputStream())
+}
 android {
     namespace = "com.smith.smith_rag"
     compileSdk = 35
@@ -14,6 +19,7 @@ android {
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")
+        buildConfigField("String", "GEMINI_KEY", "${localProperties.getProperty("geminiKey")}")
     }
 
     buildTypes {
@@ -35,9 +41,11 @@ android {
     // for jetpack compose
     buildFeatures {
         compose = true
+        buildConfig = true  //for define veriable
     }
 
 }
+// Koin Annotations 的一個 編譯時驗證機制，用來在 KSP（Kotlin Symbol Processing）階段檢查 Koin 設定是否正確
 ksp {
     arg("KOIN_CONFIG_CHECK", "true")
 }
@@ -64,6 +72,10 @@ dependencies {
     // compose-markdown
     // https://github.com/jeziellago/compose-markdown
     implementation("com.github.jeziellago:compose-markdown:0.5.6")
+
+
+    // For secured/encrypted shared preferences
+    implementation("androidx.security:security-crypto:1.1.0-alpha06")
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
