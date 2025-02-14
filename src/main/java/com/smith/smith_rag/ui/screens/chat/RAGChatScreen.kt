@@ -231,7 +231,7 @@ private fun QueryInput(
             shape = RoundedCornerShape(16.dp),
             colors =
                 TextFieldDefaults.colors(
-                    focusedTextColor = Color.Black,
+                    focusedTextColor = Color.White,
                     disabledTextColor = Color.Transparent,
                     focusedIndicatorColor = Color.Transparent,
                     unfocusedIndicatorColor = Color.Transparent,
@@ -275,7 +275,11 @@ private fun QueryInput(
                         questionText,
                         //Todo
 //                        context.getString(R.string.prompt_1),
-                        "AAAAAAAAAAAAAAAAAAA"
+                        "Here is the retrieved context\n" +
+                                "--------------------------------------------------\n" +
+                                "\$CONTEXT\n" +
+                                "--------------------------------------------------\n" +
+                                "Here is the user\\'s query: \$QUERY"
                     )
                 } catch (e: Exception) {
 

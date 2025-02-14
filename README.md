@@ -123,3 +123,30 @@ fun init(context: Context) {
         .build()
 }
 ```
+
+
+__GenerativeAI__
+```kotlin
+    // Gemini SDK - LLM (generativeai:0.9.0 on works ktor <= 2.3.X)
+    val ktorVersion = "2.3.2"
+    implementation("io.ktor:ktor-client-core:$ktorVersion")
+    implementation("io.ktor:ktor-client-okhttp:$ktorVersion")
+    implementation("io.ktor:ktor-client-content-negotiation:$ktorVersion")
+    implementation("io.ktor:ktor-serialization-kotlinx-json:$ktorVersion")
+//    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.9.0")
+//    testImplementation(kotlin("test"))
+    implementation("com.google.ai.client.generativeai:generativeai:0.9.0")
+```
+
+
+## Todo
+```
+View class dev.jeziellago.compose.markdowntext.CustomTextView is an AppCompat widget that can only be used with a Theme.AppCompat theme (or descendant).
+2025-02-14 14:35:27.730 12665-12665 TypefaceCompatApi29Impl io.shubham0204.smollmandroid         W  Font load failed (Ask Gemini)
+                                                                                                    java.lang.IllegalArgumentException: Font {path=null, style=FontStyle { weight=400, slant=0}, ttcIndex=0, axes=, localeList=[], buffer=java.nio.DirectByteBuffer[pos=0 lim=343088 cap=343088]} has already been added
+                                                                                                    	at android.graphics.fonts.FontFamily$Builder.addFont(FontFamily.java:105)
+                                                                                                    	at androidx.core.graphics.TypefaceCompatApi29Impl.createFromFontFamilyFilesResourceEntry(TypefaceCompatApi29Impl.java:185)
+                                                                                                    	at androidx.core.graphics.TypefaceCompat.createFromResourcesFamilyXml(TypefaceCompat.java:193)
+                                                                                                    	at androidx.core.content.res.ResourcesCompat.loadFont(ResourcesCompat.java:637)
+```
+

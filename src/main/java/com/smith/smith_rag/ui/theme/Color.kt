@@ -1,4 +1,4 @@
-package com.ml.shubham0204.docqa.ui.theme
+package com.smith.smith_rag.ui.theme
 
 import androidx.compose.ui.graphics.Color
 

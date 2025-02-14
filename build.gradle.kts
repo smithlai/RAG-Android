@@ -5,7 +5,7 @@ plugins {
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)  // https://developer.android.com/develop/ui/compose/compiler
     id("com.google.devtools.ksp")   // for @ComponentScan, or this may cause "org.koin.core.error.NoBeanDefFoundException: No definition found for type ChatViewModel"
-    id("io.objectbox") // 確保有這行
+    id("io.objectbox")
 }
 val localProperties = Properties().apply {
     load(project.rootProject.file("local.properties").inputStream())
@@ -85,6 +85,16 @@ dependencies {
     // Sentence Embeddings
     // https://github.com/shubham0204/Sentence-Embeddings-Android
     implementation("com.github.shubham0204:Sentence-Embeddings-Android:0.0.3")
+
+    // Gemini SDK - LLM (generativeai:0.9.0 on works ktor <= 2.3.X)
+    val ktorVersion = "2.3.13"
+    implementation("io.ktor:ktor-client-core:$ktorVersion")
+    implementation("io.ktor:ktor-client-okhttp:$ktorVersion")
+    implementation("io.ktor:ktor-client-content-negotiation:$ktorVersion")
+    implementation("io.ktor:ktor-serialization-kotlinx-json:$ktorVersion")
+//    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.9.0")
+//    testImplementation(kotlin("test"))
+    implementation("com.google.ai.client.generativeai:generativeai:0.9.0")
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

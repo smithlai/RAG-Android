@@ -1,6 +1,7 @@
 package com.smith.smith_rag.ui.screens.chat
 
 import androidx.lifecycle.ViewModel
+import com.smith.smith_rag.llm.GeminiRemoteAPI
 import com.smith.smith_rag.BuildConfig
 import com.smith.smith_rag.data.ChunksDB
 import com.smith.smith_rag.data.DocumentsDB
@@ -12,6 +13,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import org.koin.android.annotation.KoinViewModel
 
 @KoinViewModel
@@ -40,8 +42,8 @@ class RAGChatViewModel(
     ) {
 
         val apiKey = geminiAPIKey.getAPIKey() ?: throw Exception("Gemini API key is null")
-//    Todo
-//        val geminiRemoteAPI = GeminiRemoteAPI(apiKey)
+
+        val geminiRemoteAPI = GeminiRemoteAPI(apiKey)
 
         _isGeneratingResponseState.value = true
         _questionState.value = query
@@ -56,12 +58,11 @@ class RAGChatViewModel(
             }
             val inputPrompt = prompt.replace("\$CONTEXT", jointContext).replace("\$QUERY", query)
             CoroutineScope(Dispatchers.IO).launch {
-//                todo
-//                geminiRemoteAPI.getResponse(inputPrompt)?.let { llmResponse ->
-//                    _responseState.value = llmResponse
-//                    _isGeneratingResponseState.value = false
-//                    _retrievedContextListState.value = retrievedContextList
-//                }
+                geminiRemoteAPI.getResponse(inputPrompt)?.let { llmResponse ->
+                    _responseState.value = llmResponse
+                    _isGeneratingResponseState.value = false
+                    _retrievedContextListState.value = retrievedContextList
+                }
             }
         } catch (e: Exception) {
             _isGeneratingResponseState.value = false
