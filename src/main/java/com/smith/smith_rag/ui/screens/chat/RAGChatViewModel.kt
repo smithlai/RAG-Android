@@ -1,14 +1,14 @@
 package com.smith.smith_rag.ui.screens.chat
 
 import androidx.lifecycle.ViewModel
+import com.smith.smith_rag.BuildConfig
 import com.smith.smith_rag.data.ChunksDB
 import com.smith.smith_rag.data.DocumentsDB
 import com.smith.smith_rag.data.GeminiAPIKey
 import com.smith.smith_rag.data.RetrievedContext
+import com.smith.smith_rag.embeddings.SentenceEmbeddingProvider
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-//import com.ml.shubham0204.docqa.domain.embeddings.SentenceEmbeddingProvider
-//import com.ml.shubham0204.docqa.domain.llm.GeminiRemoteAPI
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
@@ -20,8 +20,7 @@ class RAGChatViewModel(
     private val documentsDB: DocumentsDB,
     private val chunksDB: ChunksDB,
     private val geminiAPIKey: GeminiAPIKey,
-//    Todo
-//    private val sentenceEncoder: SentenceEmbeddingProvider,
+    private val sentenceEncoder: SentenceEmbeddingProvider,
 ) : ViewModel() {
     private val _questionState = MutableStateFlow("")
     val questionState: StateFlow<String> = _questionState
@@ -49,12 +48,12 @@ class RAGChatViewModel(
         try {
             var jointContext = ""
             val retrievedContextList = ArrayList<RetrievedContext>()
-//    Todo
-//            val queryEmbedding = sentenceEncoder.encodeText(query)
-//            chunksDB.getSimilarChunks(queryEmbedding, n = 5).forEach {
-//                jointContext += " " + it.second.chunkData
-//                retrievedContextList.add(RetrievedContext(it.second.docFileName, it.second.chunkData))
-//            }
+
+            val queryEmbedding = sentenceEncoder.encodeText(query)
+            chunksDB.getSimilarChunks(queryEmbedding, n = BuildConfig.TOP_K).forEach {
+                jointContext += " " + it.second.chunkData
+                retrievedContextList.add(RetrievedContext(it.second.docFileName, it.second.chunkData))
+            }
             val inputPrompt = prompt.replace("\$CONTEXT", jointContext).replace("\$QUERY", query)
             CoroutineScope(Dispatchers.IO).launch {
 //                todo

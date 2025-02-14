@@ -22,6 +22,9 @@ android {
 
         buildConfigField("String", "MODULE_NAME", "\"${project.name}\"")
         buildConfigField("String", "GEMINI_KEY", "${localProperties.getProperty("geminiKey")}")
+        buildConfigField("int", "TOP_K", "5")
+        buildConfigField("int", "CHUNKSIZE", "500")
+        buildConfigField("int", "CHUNKOVERLAP", "50")
     }
 
     buildTypes {
@@ -78,6 +81,10 @@ dependencies {
 
     // For secured/encrypted shared preferences
     implementation("androidx.security:security-crypto:1.1.0-alpha06")
+
+    // Sentence Embeddings
+    // https://github.com/shubham0204/Sentence-Embeddings-Android
+    implementation("com.github.shubham0204:Sentence-Embeddings-Android:0.0.3")
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

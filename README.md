@@ -114,6 +114,8 @@ dependencies {
 __為了因應多組objectbox，每個都要有自己的name__
 // https://stackoverflow.com/questions/53546614/how-to-use-objectbox-in-gradle-multi-module-project
 ```kotlin
+// buildConfigField("String", "MODULE_NAME", "\"${project.name}\"")
+
 fun init(context: Context) {
     store = MyObjectBox.builder()
         .androidContext(context)

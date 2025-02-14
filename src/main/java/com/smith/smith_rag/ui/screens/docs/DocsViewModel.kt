@@ -2,11 +2,14 @@ package com.smith.smith_rag.ui.screens.docs
 
 import android.content.Context
 import androidx.lifecycle.ViewModel
+import com.smith.smith_rag.BuildConfig
 import com.smith.smith_rag.data.Chunk
 import com.smith.smith_rag.data.ChunksDB
 import com.smith.smith_rag.data.Document
 import com.smith.smith_rag.data.DocumentsDB
+import com.smith.smith_rag.embeddings.SentenceEmbeddingProvider
 import com.smith.smith_rag.readers.Readers
+import com.smith.smith_rag.splitters.RecursiveCharacterTextSplitter
 import com.smith.smith_rag.ui.components.setProgressDialogText
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
@@ -25,8 +28,7 @@ class DocsViewModel(
 
     private val documentsDB: DocumentsDB,
     private val chunksDB: ChunksDB,
-    // todo:
-//    private val sentenceEncoder: SentenceEmbeddingProvider,
+    private val sentenceEncoder: SentenceEmbeddingProvider,
 ) : ViewModel() {
 
     suspend fun addDocument(
@@ -46,24 +48,22 @@ class DocsViewModel(
                 ),
             )
         setProgressDialogText("Creating chunks...")
-        // todo
-//        val textSplitter = RecursiveCharacterTextSplitter(chunkSize = 500, chunkOverlap = 50) //WhiteSpaceSplitter(chunkSize = 500, chunkOverlap = 50)
-//        val chunks = textSplitter.splitText(text)
+        val textSplitter = RecursiveCharacterTextSplitter(chunkSize = BuildConfig.CHUNKSIZE, chunkOverlap = BuildConfig.CHUNKOVERLAP) //WhiteSpaceSplitter(chunkSize = 500, chunkOverlap = 50)
+        val chunks = textSplitter.splitText(text)
         setProgressDialogText("Adding chunks to database...")
-//        val size = chunks.size
-//        chunks.forEachIndexed { index, s ->
-//            setProgressDialogText("Added ${index + 1}/$size chunk(s) to database...")
-//            todo
-//            val embedding = sentenceEncoder.encodeText(s)
-//            chunksDB.addChunk(
-//                Chunk(
-//                    docId = newDocId,
-//                    docFileName = fileName,
-//                    chunkData = s,
-//                    chunkEmbedding = embedding,
-//                ),
-//            )
-//        }
+        val size = chunks.size
+        chunks.forEachIndexed { index, s ->
+            setProgressDialogText("Added ${index + 1}/$size chunk(s) to database...")
+            val embedding = sentenceEncoder.encodeText(s)
+            chunksDB.addChunk(
+                Chunk(
+                    docId = newDocId,
+                    docFileName = fileName,
+                    chunkData = s,
+                    chunkEmbedding = embedding,
+                ),
+            )
+        }
     }
 
     suspend fun addDocumentFromUrl(
