@@ -233,6 +233,20 @@ private fun DocOperations(docsViewModel: DocsViewModel) {
     Row(
         modifier = Modifier.padding(horizontal = 8.dp, vertical = 16.dp).fillMaxWidth(),
     ) {
+        // Upload Text from device
+        Button(
+            modifier = Modifier.weight(1f).padding(2.dp),
+            colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF6650a4)),
+            onClick = {
+                docType = Readers.DocumentType.TEXT
+                launcher.launch(
+                    Intent(Intent.ACTION_GET_CONTENT).apply { type = "text/plain" },
+                )
+            },
+        ) {
+            Icon(imageVector = Icons.Default.Add, contentDescription = "Add Text document", tint = Color.White)
+            Text(text = "TXT", color = Color.White)
+        }
         // Upload PDF from device
         Button(
             modifier = Modifier.weight(1f).padding(2.dp),

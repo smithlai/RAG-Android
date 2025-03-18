@@ -5,6 +5,7 @@ class Readers {
     enum class DocumentType {
         PDF,
         MS_DOCX,
+        TEXT,
         UNKNOWN
     }
 
@@ -14,6 +15,7 @@ class Readers {
             return when (docType) {
                 DocumentType.PDF -> PDFReader()
                 DocumentType.MS_DOCX -> DOCXReader()
+                DocumentType.TEXT -> TextReader()
                 DocumentType.UNKNOWN -> throw IllegalArgumentException("Unsupported document type.")
             }
         }

@@ -14,18 +14,47 @@ abstract class AbstractTextSplitter(
      */
     abstract fun splitText(text: String): List<String>
 
-    protected fun applyOverlap(chunks: List<String>): List<String> {
-        if (chunkOverlap <= 0) return chunks
+    protected fun getLastTokensWithinLimit(tokens: List<String>, chunkOverlap: Int): List<String> {
+        val result = mutableListOf<String>()
+        var totalLength = 0
 
-        val overlappedChunks = mutableListOf<String>()
-        for (i in chunks.indices) {
-            overlappedChunks.add(chunks[i])
-            if (i < chunks.size - 1) {
-                val overlapStart = max(0, chunks[i].length - chunkOverlap)
-                val overlapText = chunks[i].substring(overlapStart) + chunks[i + 1].take(chunkOverlap)
-                overlappedChunks.add(overlapText)
+        for (i in tokens.indices.reversed()) { // 反向遍歷
+            val token = tokens[i]
+            if (totalLength + token.length > chunkOverlap) break // 超過限制則停止
+            result.add(0, token) // 保持原本順序
+            totalLength += token.length
             }
+
+        return result
         }
-        return overlappedChunks
+
+    protected fun applyOverlaps(chunks: List<String>, separator: String=" "): List<String> {
+        if (chunks.isEmpty() || chunkOverlap <= 0) return chunks
+
+        val result = mutableListOf<String>()
+        var previousChunk = chunks[0]
+        result.add(previousChunk)
+        for (i in 1 until chunks.size) {
+            val currentChunk = chunks[i]
+
+            // 找出前一個 chunk 的結尾部分
+            val previous_chunks = previousChunk.split(separator)
+
+            val overlapFromPrevious = getLastTokensWithinLimit(previous_chunks, chunkOverlap)
+
+            // 將重疊部分加到當前 chunk 的開頭
+            val overlappedChunk = overlapFromPrevious.joinToString(separator) + currentChunk
+
+            result.add(overlappedChunk)
+            previousChunk = currentChunk
+        }
+        return result
+    }
+    protected fun applyOverlap(previous:String, current:String,separator: String = " "): String {
+        if (previous.isEmpty() || chunkOverlap <= 0) return current
+        val overlapFromPrevious = previous.takeLast(minOf(chunkOverlap, previous.length))
+        val overlappedChunk = overlapFromPrevious + separator +current
+        return overlappedChunk
+
     }
 }

@@ -41,8 +41,8 @@ class GeminiRemoteAPI(
                 val response = generativeModel.generateContent(prompt)
                 return@withContext response.text
             } catch (e: Exception) {
-                Log.e("aaaa", "Exception22: ${e.message}", e)
+                Log.e("aaaa", "generateContent Exception: ${e.message}", e)
             }
-            return@withContext "XXXXXXXXXXXXXXX"
+            return@withContext "Failed to connect to Gemini"
         }
 }

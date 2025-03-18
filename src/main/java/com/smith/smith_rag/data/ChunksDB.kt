@@ -1,9 +1,18 @@
 package com.smith.smith_rag.data
 
+import com.smith.smith_rag.BuildConfig
 import org.koin.core.annotation.Single
 
 @Single
 class ChunksDB {
+    companion object{
+        val DefaultRAGPrompt : String =
+        "Here is the retrieved context\n" +
+        "--------------------------------------------------\n" +
+        "\$CONTEXT\n" +
+        "--------------------------------------------------\n" +
+        "Here is the user\\'s query: \$QUERY"
+    }
     private val chunksBox = ObjectBoxStore.store.boxFor(Chunk::class.java)
 
     fun addChunk(chunk: Chunk) {
@@ -12,7 +21,7 @@ class ChunksDB {
 
     fun getSimilarChunks(
         queryEmbedding: FloatArray,
-        n: Int = 5,
+        n: Int = BuildConfig.TOP_K,
     ): List<Pair<Float, Chunk>> {
         /*
         Use maxResultCount to set the maximum number of objects to return by the ANN condition.
