@@ -1,5 +1,8 @@
-# Smith RAG module
+# Android RAG module
 
+This is a module version of [Android-Document-QA](https://github.com/shubham0204/Android-Document-QA)
+
+Example code: [LangGraphDemoOnSmolChat](https://github.com/smithlai/LangGraphDemoOnSmolChat.git)
 
 Working Steps:
 
@@ -11,7 +14,7 @@ include(":rag-android")
 ......
 ```
 
-__root/build.gradle.kts__
+**root/build.gradle.kts**
 ```kotlin
 // 導入objectbox plugin (https://docs.objectbox.io/getting-started)
 buildscript {
@@ -23,7 +26,7 @@ buildscript {
 ....
 ```
 
-in root/Application.kt
+in **root/Application.kt**
 ```kotlin
 class XXXApplication : Application() {
     override fun onCreate() {
@@ -59,12 +62,12 @@ plugins {
 
 dependencies {
     implementation(project(":rag-android"))
-    // // 不要使用objectbox Implementation
+    // remove multiple objectbox Implementation
     // debugImplementation("io.objectbox:objectbox-android-objectbrowser:4.0.3")
     // releaseImplementation("io.objectbox:objectbox-android:4.0.3")
 }
 ....
-// 不要使用objectbox apply
+// don't use objectbox apply
 //apply(plugin = "io.objectbox")
 ```
 
@@ -111,8 +114,8 @@ dependencies {
 
 **smith_rag/build.gradle.kts**
 ```kotlin
-// 記得module不要使用Implementation跟 apply(plugin = "io.objectbox")
-// 否則會跳出
+// don't use multiple objectbox Implementation and apply(plugin = "io.objectbox")
+// which occurs:
 // Duplicate class io.objectbox.android.Admin found in modules 
 // objectbox-android-4.0.3.aar -> objectbox-android-4.0.3-runtime (io.objectbox:objectbox-android:4.0.3) 
 // and 
@@ -127,7 +130,7 @@ plugins {
 
 dependencies {
     ....
-    // // 不要使用objectbox Implementation
+    // remove multiple objectbox Implementation
     // debugImplementation("io.objectbox:objectbox-android-objectbrowser:4.0.3")
     // releaseImplementation("io.objectbox:objectbox-android:4.0.3")
     ....
@@ -137,7 +140,7 @@ dependencies {
 //apply(plugin = "io.objectbox")
 ```
 
-**為了因應多組objectbox，每個都要有自己的name**
+**Each objectbox (of every module) should have their own name to avoid conflict**
 // https://stackoverflow.com/questions/53546614/how-to-use-objectbox-in-gradle-multi-module-project
 ```kotlin
 // build.gradle.kts
