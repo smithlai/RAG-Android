@@ -416,10 +416,11 @@ class RecursiveCharacterTextSplitterTest {
 
 //        println("Chunks: $chunks")
         chunks.forEachIndexed { index, chunk ->
-            println("Chunks: ======={$index}=======")
-            println("Chunks: $chunk ${chunk.length} at index $index")
+            println("Chunks: =======${chunk.length} at index $index=======")
+            if (chunk.length > chunkSize+chunkOverlap+2)
+                println("Chunks: $chunk")
         }
-        assertTrue(chunks.all { it.length <=  (chunkSize+chunkOverlap) }) // 確保最大長度限制
+        assertTrue(chunks.all { it.length <=  (chunkSize+chunkOverlap+2) }) // 確保最大長度限制(+2 for additional spaces for overlap)
     }
 //
 //    @Test

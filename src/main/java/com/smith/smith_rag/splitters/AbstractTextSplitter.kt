@@ -18,15 +18,15 @@ abstract class AbstractTextSplitter(
         val result = mutableListOf<String>()
         var totalLength = 0
 
-        for (i in tokens.indices.reversed()) { // ¤Ï¦V¹M¾ú
+        for (i in tokens.indices.reversed()) { // åå‘éæ­·
             val token = tokens[i]
-            if (totalLength + token.length > chunkOverlap) break // ¶W¹L­­¨î«h°±¤î
-            result.add(0, token) // «O«ù­ì¥»¶¶§Ç
+            if (totalLength + token.length > chunkOverlap) break // è¶…éé™åˆ¶å‰‡åœæ­¢
+            result.add(0, token) // ä¿æŒåŸæœ¬é †åº
             totalLength += token.length
-            }
+        }
 
         return result
-        }
+    }
 
     protected fun applyOverlaps(chunks: List<String>, separator: String=" "): List<String> {
         if (chunks.isEmpty() || chunkOverlap <= 0) return chunks
@@ -37,12 +37,12 @@ abstract class AbstractTextSplitter(
         for (i in 1 until chunks.size) {
             val currentChunk = chunks[i]
 
-            // §ä¥X«e¤@­Ó chunk ªºµ²§À³¡¤À
+            // æ‰¾å‡ºå‰ä¸€å€‹ chunk çš„çµå°¾éƒ¨åˆ†
             val previous_chunks = previousChunk.split(separator)
 
             val overlapFromPrevious = getLastTokensWithinLimit(previous_chunks, chunkOverlap)
 
-            // ±N­«Å|³¡¤À¥[¨ì·í«e chunk ªº¶}ÀY
+            // å°‡é‡ç–Šéƒ¨åˆ†åŠ åˆ°ç•¶å‰ chunk çš„é–‹é ­
             val overlappedChunk = overlapFromPrevious.joinToString(separator) + currentChunk
 
             result.add(overlappedChunk)

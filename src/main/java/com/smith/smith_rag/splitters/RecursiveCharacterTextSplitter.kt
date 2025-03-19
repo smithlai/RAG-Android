@@ -37,14 +37,14 @@ class RecursiveCharacterTextSplitter(
      * @return A list of text chunks that adhere to the `chunkSize` constraint.
      */
     private fun splitRecursively(text: String, remainingSeparators: List<String>): List<String> {
-        // °ò¥»±¡ªp¡G¦pªG¤å¥»ªø«×¤p©ó©Îµ¥©ó chunkSize¡Aª½±µªğ¦^
+        // åŸºæœ¬æƒ…æ³ï¼šå¦‚æœæ–‡æœ¬é•·åº¦å°æ–¼æˆ–ç­‰æ–¼ chunkSizeï¼Œç›´æ¥è¿”å›
         if (text.length <= chunkSize) {
             return listOf(text)
         }
         val separator = remainingSeparators.firstOrNull() ?: ""
         val nextSeparators = remainingSeparators.drop(1)
 
-        // ¦pªG¨S¦³§ó¦h¤À¹j²Å¡Aª½±µ«ö·Ó chunkSize ¤Á³Î
+        // å¦‚æœæ²’æœ‰æ›´å¤šåˆ†éš”ç¬¦ï¼Œç›´æ¥æŒ‰ç…§ chunkSize åˆ‡å‰²
         if (separator.isEmpty()) {
             return text.chunked(chunkSize)
         }
@@ -53,52 +53,52 @@ class RecursiveCharacterTextSplitter(
         val finalChunks = mutableListOf<String>()
         var currentChunk = StringBuilder()
         for (split in splits) {
-            // 1. ¦pªG·í«e³æ¤@¤ù¬q¤w¸g¶W¹L chunkSize
+            // 1. å¦‚æœç•¶å‰å–®ä¸€ç‰‡æ®µå·²ç¶“è¶…é chunkSize
             if (split.length > chunkSize) {
-                // ¥ı«O¦s·í«e²Ö¿nªº¤º®e
+                // å…ˆä¿å­˜ç•¶å‰ç´¯ç©çš„å…§å®¹
                 if (currentChunk.isNotEmpty()) {
                     currentChunk.append(separator)
                     finalChunks.add(currentChunk.toString())
                     currentChunk.clear()
                 }
-                // »¼°j³B²z¶Wªø¤ù¬q
+                // éè¿´è™•ç†è¶…é•·ç‰‡æ®µ
                 finalChunks.addAll(splitRecursively(split, nextSeparators))
                 continue
             }
 
-            // 2. ­pºâ·sªº¼ç¦b¶ô¡]¥]¬A¤À¹j²Å¡^
+            // 2. è¨ˆç®—æ–°çš„æ½›åœ¨å¡Šï¼ˆåŒ…æ‹¬åˆ†éš”ç¬¦ï¼‰
             val potentialChunk = if (currentChunk.isEmpty()) {
                 split
             } else {
                 "${currentChunk}$separator$split"
             }
-            // ¦pªG¥[¤J·s¤º®e«á¶W¹L chunkSize
+            // å¦‚æœåŠ å…¥æ–°å…§å®¹å¾Œè¶…é chunkSize
             if (potentialChunk.length > chunkSize) {
-                // «O¦s·í«e¶ô
+                // ä¿å­˜ç•¶å‰å¡Š
                 if (currentChunk.isNotEmpty()) {
                     currentChunk.append(separator)
                     finalChunks.add(currentChunk.toString())
                 }
-                // ¶}©l·sªº¶ô
+                // é–‹å§‹æ–°çš„å¡Š
                 currentChunk = StringBuilder(split)
             } else {
-                // ¦pªG¨S¦³¶W¹L¡A´Nªş¥[¨ì·í«e¶ô
+                // å¦‚æœæ²’æœ‰è¶…éï¼Œå°±é™„åŠ åˆ°ç•¶å‰å¡Š
                 if (currentChunk.isEmpty()) {
                     currentChunk = StringBuilder(split)
-            } else {
+                } else {
                     currentChunk.append(separator).append(split)
                 }
             }
         }
 
-        // ³B²z³Ì«á³Ñ¾lªº¤º®e
+        // è™•ç†æœ€å¾Œå‰©é¤˜çš„å…§å®¹
         if (currentChunk.isNotEmpty()) {
             currentChunk.append(separator)
             finalChunks.add(currentChunk.toString())
         }
 
         return finalChunks
-        }
+    }
 
 }
 
