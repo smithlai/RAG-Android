@@ -56,8 +56,23 @@ __app/build.gradle.kts__
 // and 
 // objectbox-android-objectbrowser-4.0.3.aar -> objectbox-android-objectbrowser-4.0.3-runtime (io.objectbox:objectbox-android-objectbrowser:4.0.3)
 
-plugins {
-    id("io.objectbox")
+android {
+    ....
+    packaging {
+        resources {
+            excludes += listOf(
+                // for rag
+                "META-INF/DEPENDENCIES",
+                "META-INF/DEPENDENCIES.txt",
+                "META-INF/LICENSE",
+                "META-INF/LICENSE.txt",
+                "META-INF/NOTICE",
+                "META-INF/NOTICE.txt",
+                "/META-INF/{AL2.0,LGPL2.1}"
+            )
+        }
+    }
+    ....
 }
 
 dependencies {
@@ -70,7 +85,7 @@ dependencies {
 // don't use objectbox apply
 //apply(plugin = "io.objectbox")
 ```
-
+-------------------------------------------------------------
 ## Jetpack compose
 
 __smith_rag/build.gradle.kts__
