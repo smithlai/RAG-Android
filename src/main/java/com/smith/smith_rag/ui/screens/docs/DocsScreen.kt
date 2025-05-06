@@ -114,7 +114,7 @@ fun DocsScreen(onBackClick: (() -> Unit)) {
 
 @Composable
 private fun ColumnScope.DocsList(docsViewModel: DocsViewModel) {
-    val docs by docsViewModel.getAllDocuments().collectAsState(emptyList())
+    val docs by docsViewModel.ragApi.getAllDocuments().collectAsState(emptyList())
     LazyColumn(modifier = Modifier.fillMaxSize().weight(1f)) {
         items(docs) { doc ->
             DocsListItem(
@@ -126,7 +126,7 @@ private fun ColumnScope.DocsList(docsViewModel: DocsViewModel) {
                             doc.docText
                         },
                 ),
-                onRemoveDocClick = { docId -> docsViewModel.removeDocument(docId) },
+                onRemoveDocClick = { docId -> docsViewModel.ragApi.removeDocument(docId) },
             )
         }
     }
@@ -216,7 +216,7 @@ private fun DocOperations(docsViewModel: DocsViewModel) {
                 context.contentResolver.openInputStream(uri)?.let { inputStream ->
                     showProgressDialog()
                     CoroutineScope(Dispatchers.IO).launch {
-                        docsViewModel.addDocument(
+                        docsViewModel.ragApi.addDocument(
                             inputStream,
                             docFileName,
                             docType,
@@ -328,7 +328,7 @@ private fun DocOperations(docsViewModel: DocsViewModel) {
                     if (pdfUrl.isNotBlank()) {
                         showProgressDialog()
                         CoroutineScope(Dispatchers.IO).launch {
-                            docsViewModel.addDocumentFromUrl(pdfUrl, context) { success ->
+                            docsViewModel.ragApi.addDocumentFromUrl(pdfUrl, context) { success ->
                                 hideProgressDialog()
                                 if (success) {
                                     Toast.makeText(context, "PDF added from source", Toast.LENGTH_SHORT).show()
