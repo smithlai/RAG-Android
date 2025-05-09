@@ -43,6 +43,23 @@ android {
     kotlinOptions {
         jvmTarget = "21"
     }
+    packaging {
+        resources {
+            excludes += listOf(
+                // for langgraph4j
+                "META-INF/INDEX.LIST",
+                "META-INF/io.netty.versions.properties",
+                // for rag
+                "META-INF/DEPENDENCIES",
+                "META-INF/DEPENDENCIES.txt",
+                "META-INF/LICENSE",
+                "META-INF/LICENSE.txt",
+                "META-INF/NOTICE",
+                "META-INF/NOTICE.txt",
+                "/META-INF/{AL2.0,LGPL2.1}"
+            )
+        }
+    }
     // for jetpack compose
     buildFeatures {
         compose = true
